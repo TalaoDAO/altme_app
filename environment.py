@@ -12,9 +12,9 @@ class currentMode() :
 			self.IP = '18.190.21.227' 
 		elif self.myenv == 'local' :
 			self.sys_path = '/home/thierry'
-			self.server = 'http://' + extract_ip() + ':5000/'
+			self.server = 'http://' + extract_ip() + ':15000/'
 			self.IP = extract_ip()
-			self.port = 5000
+			self.port = 15000
 		else :
 			print('environment variable problem')
 			exit()
