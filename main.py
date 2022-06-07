@@ -25,7 +25,7 @@ app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 
 
-
+@app.route('/login' , methods=['GET']) 
 @app.route('/' , methods=['GET']) 
 def test() :
    return jsonify("hello")
