@@ -19,7 +19,7 @@ class currentMode() :
 			print('environment variable problem')
 			exit()
 		print('mode server = ', self.server)
-		self.help_path = self.sys_path + '/altme_app/templates/'
+		self.help_path = self.sys_path + '/altme/templates/'
 
 
 def extract_ip():
