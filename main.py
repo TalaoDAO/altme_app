@@ -24,11 +24,12 @@ app.config['SESSION_TYPE'] = 'redis' # Redis server side session
 app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 
+version = "1.0"
 
 @app.route('/login' , methods=['GET']) 
 @app.route('/' , methods=['GET']) 
 def test() :
-   return jsonify("hello")
+   return jsonify("hello , version : " + version)
 
 
 # Google universal link
