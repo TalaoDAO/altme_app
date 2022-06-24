@@ -2,12 +2,12 @@
     "applinks": {
         "details": [
             {
-                "appIDs": ["Z8P3N79J42.co.altme.app, Z8P3N79J42.co.altme.alt.me.altme.dev, Z8P3N79J42.co.altme.alt.me.altme.stg"],
+                "appIDs": ["Z8P3N79J42.co.altme.app"],
                 "components": [
                     {
                         "/": "/app/download*",
                         "comment": "Link to credential offer"
-                    },
+                    }
                     {
                         "/": "/authorization_endpoint*",
                         "comment": "Link to SIOPV2 flow"
