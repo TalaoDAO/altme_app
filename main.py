@@ -2,12 +2,13 @@
 Python 3.9 
 didkit 0.3.0 get_version
 """
-from flask import Flask, render_template, jsonify
+import logging
+from flask import Flask, render_template, jsonify, request, redirect
 import json
 import environment
 import os
 import sys
-
+from device_detector import SoftwareDetector
 
 print("python version : ", sys.version)
 
@@ -30,6 +31,19 @@ version = "1.0"
 @app.route('/' , methods=['GET']) 
 def test() :
    return jsonify("hello , version : " + version)
+
+
+@app.route('/device_detector' , methods=['GET']) 
+def device_detector ():
+    ua = request.headers.get('User-Agent')
+    device = SoftwareDetector(ua).parse()
+    logging.info(device.os_name())
+    if device.os_name() == "Android" :
+        return redirect("https://play.google.com/store/apps/details?id=co.talao.wallet&hl=fr_FR")
+    elif device.os_name() == "iOS" : 
+        return redirect("https://apps.apple.com/fr/app/talao-wallet/id1582183266?platform=iphone")
+    else :
+        return jsonify('unknown device')    
 
 
 # Google universal link
