@@ -10,7 +10,9 @@ import os
 import sys
 from device_detector import SoftwareDetector
 
-print("python version : ", sys.version)
+logging.basicConfig(level=logging.INFO)
+
+logging.info("python version : %s", sys.version)
 
 # init
 myenv = os.getenv('MYENV')
@@ -39,9 +41,9 @@ def device_detector ():
     device = SoftwareDetector(ua).parse()
     logging.info(device.os_name())
     if device.os_name() == "Android" :
-        return redirect("https://play.google.com/store/apps/details?id=co.talao.wallet&hl=fr_FR")
+        return redirect("https://play.google.com/store/apps/details?id=co.altme.alt.me.altme")
     elif device.os_name() == "iOS" : 
-        return redirect("https://apps.apple.com/fr/app/talao-wallet/id1582183266?platform=iphone")
+        return redirect("https://apps.apple.com/fr/app/altme/id1633216869")
     else :
         return jsonify('unknown device')    
 
