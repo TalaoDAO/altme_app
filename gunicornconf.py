@@ -10,6 +10,8 @@ workers = 5
 #workers = 2
 #workers = multiprocessing.cpu_count()*2+1
 
+worker_class = 'gevent' 
+
 loglevel = 'info'
 #errorlog = os.path.join(_VAR, 'log/api-error.log')
 #accesslog = os.path.join(_VAR, 'log/api-access.log')
