@@ -76,7 +76,6 @@ def app_download() :
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
 @app.route('/issuer/did.json', methods=['GET'])
 def well_known_did () :
-def well_known_did () :
     """ did:web
     https://w3c-ccg.github.io/did-method-web/
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
