@@ -80,7 +80,6 @@ def well_known_did () :
     https://w3c-ccg.github.io/did-method-web/
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
     """
-    del issuer_key['d']
     DidDocument = did_doc(issuer_key)
     return jsonify(DidDocument)
 
