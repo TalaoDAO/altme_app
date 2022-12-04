@@ -74,6 +74,8 @@ def app_download() :
 
 # .well-known DID API
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
+@app.route('/issuer/did.json', methods=['GET'])
+def well_known_did () :
 def well_known_did () :
     """ did:web
     https://w3c-ccg.github.io/did-method-web/
@@ -93,26 +95,26 @@ def did_doc(issuer_key) :
                         "@type": "@json"
                     }
                 ],
-                "id": "did:web:altme.io:issuer",
+                "id": "did:web:app.altme.io:issuer",
                 "verificationMethod": [
                     {
-                        "id": "did:web:altme.io:issuer#key-1",
+                        "id": "did:web:app.altme.io:issuer#key-1",
                         "type": "JwsVerificationKey2020",
-                        "controller": "did:web:talao.co",
+                        "controller": "did:web:app.altme.io:issuer",
                         "publicKeyJwk": issuer_key     
                     },
                 ],
                 "authentication" : [
-                    "did:web:altme.io:issuer#key-1",
+                    "did:web:app.altme.io:issuer#key-1",
                 ],
                 "assertionMethod" : [
-                    "did:web:altme.io:issuer#key-1",
+                    "did:web:app.altme.io:issuer#key-1",
                 ],
                 "keyAgreement" : [
-                    "did:web:altme.io:issuer#key-1"
+                    "did:web:app.altme.io:issuer#key-1"
                 ],
                 "capabilityInvocation":[
-                    "did:web:altme.io:issuer#key-1"
+                    "did:web:app.altme.io:issuer#key-1"
                 ]
             }
 
