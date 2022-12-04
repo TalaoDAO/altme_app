@@ -27,7 +27,12 @@ app.config['SESSION_TYPE'] = 'redis' # Redis server side session
 app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 
-version = "1.0"
+version = "1.1"
+
+issuer_key = json.load(open("keys.json", "r"))['talao_Ed25519_private_key']
+issuer_did = "did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du"
+issuer_vm = "did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du#blockchainAccountId"
+
 
 @app.route('/login' , methods=['GET']) 
 @app.route('/' , methods=['GET']) 
@@ -65,6 +70,51 @@ def apple_app_site_association():
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
     return render_template('app_download.html')
+
+
+# .well-known DID API
+@app.route('/issuer/.well-known/did.json', methods=['GET'])
+def well_known_did () :
+    """ did:web
+    https://w3c-ccg.github.io/did-method-web/
+    https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
+    """
+    del issuer_key['d']
+    DidDocument = did_doc(issuer_key)
+    return jsonify(DidDocument)
+
+
+def did_doc(issuer_key) :
+    return  {
+                "@context": [
+                    "https://www.w3.org/ns/did/v1",
+                    {
+                        "@id": "https://w3id.org/security#publicKeyJwk",
+                        "@type": "@json"
+                    }
+                ],
+                "id": "did:web:altme.io:issuer",
+                "verificationMethod": [
+                    {
+                        "id": "did:web:altme.io:issuer#key-1",
+                        "type": "JwsVerificationKey2020",
+                        "controller": "did:web:talao.co",
+                        "publicKeyJwk": issuer_key     
+                    },
+                ],
+                "authentication" : [
+                    "did:web:altme.io:issuer#key-1",
+                ],
+                "assertionMethod" : [
+                    "did:web:altme.io:issuer#key-1",
+                ],
+                "keyAgreement" : [
+                    "did:web:altme.io:issuer#key-1"
+                ],
+                "capabilityInvocation":[
+                    "did:web:altme.io:issuer#key-1"
+                ]
+            }
 
 
 # MAIN entry point. Flask test server
