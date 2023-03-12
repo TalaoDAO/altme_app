@@ -3,7 +3,7 @@ Python 3.9
 didkit 0.3.0 get_version
 """
 import logging
-from flask import Flask, render_template, jsonify, request, redirect
+from flask import Flask, render_template, jsonify, request, redirect, Response
 import json
 import environment
 import os
@@ -27,7 +27,7 @@ app.config['SESSION_TYPE'] = 'redis' # Redis server side session
 app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 
-version = "1.1"
+version = "1.2"
 
 issuer_key = json.load(open("keys.json", "r"))['talao_Ed25519_private_key']
 issuer_did = "did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du"
@@ -52,6 +52,14 @@ def device_detector ():
     else :
         return jsonify('unknown device')    
 
+# OpenID 
+@app.route('/app/issuer/.well-known/openid-configuration', methods=['GET'])
+def openid() :
+    oidc = {
+        'credential_issuer': 'https://app.altme.io/app/issuer',
+        'authorization_endpoint':  'https://app.altme.io/app/authorize' 
+    }
+    return jsonify(oidc)
 
 # Google universal link
 @app.route('/.well-known/assetlinks.json' , methods=['GET']) 
@@ -81,7 +89,12 @@ def well_known_did () :
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
     """
     DidDocument = did_doc(issuer_key)
-    return jsonify(DidDocument)
+    # https://tedboy.github.io/flask/generated/generated/flask.Response.html
+    headers = { "Content-Type" : "application/did+ld+json",
+                "Cache-Control" : "no-cache"
+    }
+    return Response(json.dumps(DidDocument), headers=headers)
+    #return jsonify(DidDocument)
 
 
 def did_doc(issuer_key) :

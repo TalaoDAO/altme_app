@@ -18,7 +18,6 @@ class currentMode() :
 		else :
 			print('environment variable problem')
 			exit()
-		print('mode server = ', self.server)
 		self.help_path = self.sys_path + '/altme/templates/'
 
 
