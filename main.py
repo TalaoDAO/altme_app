@@ -52,6 +52,7 @@ def device_detector ():
     else :
         return jsonify('unknown device')    
 
+
 # OpenID 
 @app.route('/app/issuer/.well-known/openid-configuration', methods=['GET'])
 def openid() :
@@ -84,7 +85,11 @@ def app_download() :
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
 @app.route('/issuer/did.json', methods=['GET'])
 def well_known_did () :
-    """ did:web
+    """ 
+    did:web
+    
+    did:web:app.altme.io:issuer
+    
     https://w3c-ccg.github.io/did-method-web/
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
     """
@@ -94,7 +99,6 @@ def well_known_did () :
                 "Cache-Control" : "no-cache"
     }
     return Response(json.dumps(DidDocument), headers=headers)
-    #return jsonify(DidDocument)
 
 
 def did_doc(issuer_key) :
