@@ -1,14 +1,15 @@
 [
-    {
-        "relation": [
-            "delegate_permission/common.handle_all_urls"
-        ],
-        "target": {
-            "namespace": "android_app",
-            "package_name": "co.altme.alt.me.altme",
-            "sha256_cert_fingerprints": [
-                "A9:37:34:8D:13:6A:AB:9D:C8:F2:17:57:4E:F5:EB:5D:47:32:2C:F2:67:9D:7D:9E:F9:B4:BF:CD:57:69:DE:49"
-            ]
-        }
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.altme.alt.me.altme",
+      "sha256_cert_fingerprints": [
+        "A9:37:34:8D:13:6A:AB:9D:C8:F2:17:57:4E:F5:EB:5D:47:32:2C:F2:67:9D:7D:9E:F9:B4:BF:CD:57:69:DE:49",
+        "B5:60:75:9D:56:6B:B3:8D:68:E0:69:F3:EC:09:67:8B:EC:4E:3D:22:14:E7:F8:05:F5:7B:84:1D:6F:17:70:08"
+      ]
     }
+  }
 ]
