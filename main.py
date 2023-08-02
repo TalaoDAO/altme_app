@@ -26,12 +26,7 @@ app.config['SESSION_COOKIE_NAME'] = 'altme'
 app.config['SESSION_TYPE'] = 'redis' # Redis server side session
 app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
-
-version = "1.2"
-
-issuer_key = json.load(open("keys.json", "r"))['talao_Ed25519_private_key']
-issuer_did = "did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du"
-issuer_vm = "did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du#blockchainAccountId"
+version = "1.3"
 
 
 @app.route('/login' , methods=['GET']) 
@@ -93,15 +88,14 @@ def well_known_did () :
     https://w3c-ccg.github.io/did-method-web/
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
     """
-    DidDocument = did_doc(issuer_key)
     # https://tedboy.github.io/flask/generated/generated/flask.Response.html
     headers = { "Content-Type" : "application/did+ld+json",
                 "Cache-Control" : "no-cache"
     }
-    return Response(json.dumps(DidDocument), headers=headers)
+    return Response(json.dumps(did_doc()), headers=headers)
 
 
-def did_doc(issuer_key) :
+def did_doc() :
     return  {
                 "@context": [
                     "https://www.w3.org/ns/did/v1",
@@ -116,20 +110,49 @@ def did_doc(issuer_key) :
                         "id": "did:web:app.altme.io:issuer#key-1",
                         "type": "JwsVerificationKey2020",
                         "controller": "did:web:app.altme.io:issuer",
-                        "publicKeyJwk": issuer_key     
+                        "publicKeyJwk": {
+                            "crv":"Ed25519",
+                            "kty":"OKP",
+                            "x":"FUoLewH4w4-KdaPH2cjZbL--CKYxQRWR05Yd_bIbhQo"
+                        }     
                     },
+                    {
+                        "id": "did:web:app.altme.io:issuer#key-2",
+                        "type": "JwsVerificationKey2020",
+                        "controller": "did:web:app.altme.io:issuer",
+                        "publicKeyJwk": {
+                            "kty":"OKP",
+                            "crv":"Ed25519",
+                            "x":"qrTeh39OTl-xPuYhptNR3nkv0TEjaF4WdWi5Cf5ESs0"
+                        }    
+                    },
+                    {
+                        "id": "did:web:app.altme.io:issuer#key-3",
+                        "type": "JwsVerificationKey2020",
+                        "controller": "did:web:app.altme.io:issuer",
+                        "publicKeyJwk": {
+                            "crv":"secp256k1",
+                            "kty":"EC",
+                            "x":"AARiMrLNsRka9wMEoSgMnM7BwPug4x9IqLDwHVU-1A4",
+                            "y":"vKMstC3TEN3rVW32COQX002btnU70v6P73PMGcUoZQs",
+                        }
+                    }
                 ],
                 "authentication" : [
                     "did:web:app.altme.io:issuer#key-1",
+                    "did:web:app.altme.io:issuer#key-2",
+                    "did:web:app.altme.io:issuer#key-3"
                 ],
                 "assertionMethod" : [
                     "did:web:app.altme.io:issuer#key-1",
+                    "did:web:app.altme.io:issuer#key-2",
+                    "did:web:app.altme.io:issuer#key-3"
                 ],
                 "keyAgreement" : [
-                    "did:web:app.altme.io:issuer#key-1"
+                    "did:web:app.altme.io:issuer#key-2"
                 ],
                 "capabilityInvocation":[
-                    "did:web:app.altme.io:issuer#key-1"
+                    "did:web:app.altme.io:issuer#key-2"
                 ]
             }
 
