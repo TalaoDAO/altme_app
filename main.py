@@ -57,14 +57,15 @@ def openid() :
     }
     return jsonify(oidc)
 
-# Google universal link
+
+# Google universal link for altme
 @app.route('/.well-known/assetlinks.json' , methods=['GET']) 
 def assetlinks(): 
     document = json.load(open('assetlinks.json', 'r'))
     return jsonify(document)
 
 
-# Apple universal link
+# Apple universal link for altme
 @app.route('/.well-known/apple-app-site-association' , methods=['GET']) 
 def apple_app_site_association(): 
     document = json.load(open('apple-app-site-association', 'r'))
@@ -79,82 +80,94 @@ def app_download() :
 # .well-known DID API
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
 @app.route('/issuer/did.json', methods=['GET'])
-def well_known_did () :
+def well_known_did():
     """ 
     did:web
-    
     did:web:app.altme.io:issuer
-    
     https://w3c-ccg.github.io/did-method-web/
     https://identity.foundation/.well-known/resources/did-configuration/#LinkedDomains
     """
     # https://tedboy.github.io/flask/generated/generated/flask.Response.html
-    headers = { "Content-Type" : "application/did+ld+json",
-                "Cache-Control" : "no-cache"
+    headers = { 
+        "Content-Type" : "application/did+ld+json",
+        "Cache-Control" : "no-cache"
     }
     return Response(json.dumps(did_doc()), headers=headers)
 
 
-def did_doc() :
-    return  {
-                "@context": [
-                    "https://www.w3.org/ns/did/v1",
-                    {
-                        "@id": "https://w3id.org/security#publicKeyJwk",
-                        "@type": "@json"
-                    }
-                ],
-                "id": "did:web:app.altme.io:issuer",
-                "verificationMethod": [
-                    {
-                        "id": "did:web:app.altme.io:issuer#key-1",
-                        "type": "JwsVerificationKey2020",
-                        "controller": "did:web:app.altme.io:issuer",
-                        "publicKeyJwk": {
-                            "crv":"Ed25519",
-                            "kty":"OKP",
-                            "x":"FUoLewH4w4-KdaPH2cjZbL--CKYxQRWR05Yd_bIbhQo"
-                        }     
-                    },
-                    {
-                        "id": "did:web:app.altme.io:issuer#key-2",
-                        "type": "JwsVerificationKey2020",
-                        "controller": "did:web:app.altme.io:issuer",
-                        "publicKeyJwk": {
-                            "kty":"OKP",
-                            "crv":"Ed25519",
-                            "x":"qrTeh39OTl-xPuYhptNR3nkv0TEjaF4WdWi5Cf5ESs0"
-                        }    
-                    },
-                    {
-                        "id": "did:web:app.altme.io:issuer#key-3",
-                        "type": "JwsVerificationKey2020",
-                        "controller": "did:web:app.altme.io:issuer",
-                        "publicKeyJwk": {
-                            "crv":"secp256k1",
-                            "kty":"EC",
-                            "x":"AARiMrLNsRka9wMEoSgMnM7BwPug4x9IqLDwHVU-1A4",
-                            "y":"vKMstC3TEN3rVW32COQX002btnU70v6P73PMGcUoZQs",
-                        }
-                    }
-                ],
-                "authentication" : [
-                    "did:web:app.altme.io:issuer#key-1",
-                    "did:web:app.altme.io:issuer#key-2",
-                    "did:web:app.altme.io:issuer#key-3"
-                ],
-                "assertionMethod" : [
-                    "did:web:app.altme.io:issuer#key-1",
-                    "did:web:app.altme.io:issuer#key-2",
-                    "did:web:app.altme.io:issuer#key-3"
-                ],
-                "keyAgreement" : [
-                    "did:web:app.altme.io:issuer#key-2"
-                ],
-                "capabilityInvocation":[
-                    "did:web:app.altme.io:issuer#key-2"
-                ]
+def did_doc():
+    return {
+        "@context": [
+            "https://www.w3.org/ns/did/v1",
+            {
+                "@id": "https://w3id.org/security#publicKeyJwk",
+                "@type": "@json"
             }
+        ],
+        "id": "did:web:app.altme.io:issuer",
+        "verificationMethod": [
+            {
+                "id": "did:web:app.altme.io:issuer#key-1",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:web:app.altme.io:issuer",
+                "publicKeyJwk": {
+                    "crv": "Ed25519",
+                    "kty": "OKP",
+                    "x": "FUoLewH4w4-KdaPH2cjZbL--CKYxQRWR05Yd_bIbhQo"
+                }     
+            },
+            {
+                "id": "did:web:app.altme.io:issuer#key-2",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:web:app.altme.io:issuer",
+                "publicKeyJwk": {
+                    "kty": "OKP",
+                    "crv": "Ed25519",
+                    "x": "qrTeh39OTl-xPuYhptNR3nkv0TEjaF4WdWi5Cf5ESs0"
+                }    
+            },
+            {
+                "id": "did:web:app.altme.io:issuer#key-3",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:web:app.altme.io:issuer",
+                "publicKeyJwk": {
+                    "crv": "secp256k1",
+                    "kty": "EC",
+                    "x": "AARiMrLNsRka9wMEoSgMnM7BwPug4x9IqLDwHVU-1A4",
+                    "y": "vKMstC3TEN3rVW32COQX002btnU70v6P73PMGcUoZQs",
+                }
+            },
+            {
+                "id": "did:web:app.altme.io:issuer#key-4",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:web:app.altme.io:issuer",
+                "publicKeyJwk": {
+                    "crv": "P-256",
+                    "kty": "EC",
+                    "x": "ig7Enz4ZROsj3amXJNypX4fnVGqJ_9HlNnhoaCdxaYU",
+                    "y": "GDep0hIdif0kMqIeaYFV1iCjkVRJ3cGzVnvq2LwST_c"
+                }
+            }
+        ],
+        "authentication" : [
+            "did:web:app.altme.io:issuer#key-1",
+            "did:web:app.altme.io:issuer#key-2",
+            "did:web:app.altme.io:issuer#key-3",
+            "did:web:app.altme.io:issuer#key-4"
+        ],
+        "assertionMethod" : [
+            "did:web:app.altme.io:issuer#key-1",
+            "did:web:app.altme.io:issuer#key-2",
+            "did:web:app.altme.io:issuer#key-3",
+            "did:web:app.altme.io:issuer#key-4"
+        ],
+        "keyAgreement" : [
+            "did:web:app.altme.io:issuer#key-2"
+        ],
+        "capabilityInvocation":[
+            "did:web:app.altme.io:issuer#key-2"
+        ]
+    }
 
 
 # MAIN entry point. Flask test server
