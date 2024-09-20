@@ -91,7 +91,7 @@ def app_download() :
 
 @app.route('/app/download/configuration' , methods=['GET']) 
 def app_download_configuration():
-    host = request.headers['Host']
+    host = request.headers['X-Real-Ip']
     logging.info('host call for configuration = %s', host)
     try:
         configuration = json.loads(red.get(host).decode())
