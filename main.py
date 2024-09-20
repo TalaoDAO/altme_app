@@ -6,6 +6,7 @@ import logging
 from flask import Flask, render_template, jsonify, request, redirect, Response
 import json
 import environment
+import redis
 import os
 import sys
 from device_detector import SoftwareDetector
@@ -13,6 +14,10 @@ from device_detector import SoftwareDetector
 logging.basicConfig(level=logging.INFO)
 
 logging.info("python version : %s", sys.version)
+
+# Redis init red = redis.StrictRedis()
+red = redis.Redis(host='localhost', port=6379, db=0)
+
 
 # init
 myenv = os.getenv('MYENV')
@@ -74,8 +79,22 @@ def apple_app_site_association():
 
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
+    configuration = request.args
+    print(configuration)
+    host = request.headers['Host']
+    logging.info("Host = ", host)
+    red.setex(host, 1000, json.dumps(configuration))
     return render_template('app_download.html')
 
+
+@app.route('/app/download/configuration' , methods=['GET']) 
+def app_download_configuration():
+    host = request.headers['Host']
+    try:
+        configuration = json.loads(red.get(host).decode())
+    except:
+        configuration = ""
+    return jsonify(configuration)
 
 # .well-known DID API
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
