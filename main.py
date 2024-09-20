@@ -80,8 +80,8 @@ def apple_app_site_association():
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
     configuration = request.args
-    print(configuration)
     host = request.headers['Host']
+    print(configuration, ' for mobile ', host)
     logging.info("Host = ", host)
     red.setex(host, 1000, json.dumps(configuration))
     return render_template('app_download.html')
@@ -90,6 +90,7 @@ def app_download() :
 @app.route('/app/download/configuration' , methods=['GET']) 
 def app_download_configuration():
     host = request.headers['Host']
+    logging.info('host call for configuration = %s', host)
     try:
         configuration = json.loads(red.get(host).decode())
     except:
