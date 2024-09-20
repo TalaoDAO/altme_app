@@ -80,6 +80,7 @@ def apple_app_site_association():
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
     configuration = request.args
+    print(request.headers)
     host = request.headers['Host']
     print(configuration, ' for mobile ', host)
     logging.info("Host = ", host)
