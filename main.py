@@ -81,7 +81,8 @@ def apple_app_site_association():
 def app_download() :
     configuration = request.args
     print(request.headers)
-    host = request.headers['Host']
+    print(request.args)
+    host = request.headers['X-Real-Ip']
     print(configuration, ' for mobile ', host)
     logging.info("Host = ", host)
     red.setex(host, 1000, json.dumps(configuration))
