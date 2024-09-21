@@ -88,7 +88,7 @@ def apple_app_site_association():
 
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
-    configuration = copy.deepcopy(request.args)
+    configuration = {**request.args}
     print(configuration['wallet-provider'][0:4])
     if configuration['wallet-provider'][0:4] != 'http':
         configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
