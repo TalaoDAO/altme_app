@@ -9,6 +9,8 @@ import environment
 import redis
 import os
 import sys
+import hashlib
+import base64
 from device_detector import SoftwareDetector
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +34,12 @@ app.config['SESSION_TYPE'] = 'redis' # Redis server side session
 app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 version = "1.3"
+
+
+def hash(text):
+    m = hashlib.sha256()
+    m.update(text.encode())
+    return base64.urlsafe_b64encode(m.digest()).decode().replace("=", "")
 
 
 @app.route('/login' , methods=['GET']) 
@@ -80,23 +88,26 @@ def apple_app_site_association():
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
     configuration = request.args
-    print(request.headers)
-    print(request.args)
-    host = request.headers['X-Real-Ip']
-    print(configuration, ' for mobile ', host)
-    logging.info("Host = ", host)
-    red.setex(host, 1000, json.dumps(configuration))
+    print(configuration['wallet-provider'][0:3])
+    if configuration['wallet-provider'][0:3] == 'http':
+        configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
+    host = request.headers['X-Real-Ip'] + request.headers['User-Agent']
+    host_hash = hash(host)
+    logging.info('%s for mobile : %s',configuration, host)
+    logging.info("Host = %s", host)
+    red.setex(host_hash, 300, json.dumps(configuration))
     return render_template('app_download.html')
 
 
 @app.route('/app/download/configuration' , methods=['GET']) 
-def app_download_configuration():
-    host = request.headers['X-Real-Ip']
+def app_download_configuration():                           
+    host = request.headers['X-Real-Ip'] + request.headers['User-Agent']
+    host_hash = hash(host)
     logging.info('host call for configuration = %s', host)
     try:
-        configuration = json.loads(red.get(host).decode())
+        configuration = json.loads(red.get(host_hash).decode())
     except:
-        configuration = ""
+        configuration = None
     return jsonify(configuration)
 
 # .well-known DID API
