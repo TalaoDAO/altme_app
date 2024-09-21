@@ -89,7 +89,7 @@ def apple_app_site_association():
 def app_download() :
     configuration = request.args
     print(configuration['wallet-provider'][0:3])
-    if configuration['wallet-provider'][0:3] == 'http':
+    if configuration['wallet-provider'][0:4] == 'http':
         configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
     host = request.headers['X-Real-Ip'] + request.headers['User-Agent']
     host_hash = hash(host)
@@ -99,7 +99,7 @@ def app_download() :
     return render_template('app_download.html')
 
 
-@app.route('/app/download/configuration' , methods=['GET']) 
+@app.route('/configuration' , methods=['GET']) 
 def app_download_configuration():                           
     host = request.headers['X-Real-Ip'] + request.headers['User-Agent']
     host_hash = hash(host)
@@ -109,6 +109,7 @@ def app_download_configuration():
     except:
         configuration = None
     return jsonify(configuration)
+
 
 # .well-known DID API
 @app.route('/issuer/.well-known/did.json', methods=['GET'])
