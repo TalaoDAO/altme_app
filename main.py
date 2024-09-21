@@ -36,6 +36,8 @@ app.config['SESSION_FILE_THRESHOLD'] = 100
 app.config['SECRET_KEY'] = "altme_app"
 version = "1.3"
 
+from urllib.parse import urlencode
+print(urlencode ({"login":"guest@eudi.talao.co","password":"x","wallet-provider":"https://preprod-wallet-provider.talao.co"}))
 
 def hash(text):
     m = hashlib.sha256()
@@ -88,14 +90,16 @@ def apple_app_site_association():
 
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
-    configuration = {**request.args}
-    print(configuration['wallet-provider'][0:4])
+    configuration = {
+        "login": request.args.get('login'),
+        "passsword": request.args.get('password'),
+        "wallet-provider": request.args.get('wallet-provider')
+    }
     if configuration['wallet-provider'][0:4] != 'http':
         configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
     host = request.headers['X-Real-Ip'] + request.headers['User-Agent']
     host_hash = hash(host)
     logging.info('%s for mobile : %s',configuration, host)
-    logging.info("Host = %s", host)
     red.setex(host_hash, 300, json.dumps(configuration))
     return render_template('app_download.html')
 
