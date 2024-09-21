@@ -11,6 +11,7 @@ import os
 import sys
 import hashlib
 import base64
+import copy
 from device_detector import SoftwareDetector
 
 logging.basicConfig(level=logging.INFO)
@@ -87,7 +88,7 @@ def apple_app_site_association():
 
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
-    configuration = request.args
+    configuration = copy.deepcopy(request.args)
     print(configuration['wallet-provider'][0:4])
     if configuration['wallet-provider'][0:4] != 'http':
         configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
