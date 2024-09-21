@@ -109,7 +109,9 @@ def app_download_configuration():
     logging.info('wallet call to get configuration = %s', host)
     try:
         configuration = json.loads(red.get(host_hash).decode())
+        logging.info("Configuration sent to this wallet")
     except:
+        logging.warning("No configuration available for this wallet")
         configuration = None
     return jsonify(configuration)
 
