@@ -93,9 +93,7 @@ def app_download() :
         "passsword": request.args.get('password'),
         "wallet-provider": request.args.get('wallet-provider')
     }
-    if configuration['wallet-provider'][0:4] != 'http':
-        configuration['wallet-provider'] = 'https://' + configuration['wallet-provider']
-    host = request.headers['X-Real-Ip'] + ' ' +  request.headers['User-Agent']
+    host = request.headers['X-Real-Ip'] # + ' ' +  request.headers['User-Agent']
     host_hash = hash(host)
     logging.info('configuration : %s stored for wallet : %s',configuration, host)
     red.setex(host_hash, 300, json.dumps(configuration))
@@ -104,7 +102,7 @@ def app_download() :
 
 @app.route('/configuration' , methods=['GET']) 
 def app_download_configuration():                           
-    host = request.headers['X-Real-Ip'] + ' ' + request.headers['User-Agent']
+    host = request.headers['X-Real-Ip'] # + ' ' + request.headers['User-Agent']
     host_hash = hash(host)
     logging.info('wallet call to get configuration = %s', host)
     try:
