@@ -4,6 +4,7 @@ didkit 0.3.0 get_version
 """
 import logging
 from flask import Flask, render_template, jsonify, request, redirect, Response
+from flask_mobility import Mobility
 import json
 import environment
 import redis
@@ -21,6 +22,8 @@ logging.info("python version : %s", sys.version)
 # Redis init red = redis.StrictRedis()
 red = redis.Redis(host='localhost', port=6379, db=0)
 
+app = Flask(__name__)
+Mobility(app)
 
 # init
 myenv = os.getenv('MYENV')
@@ -99,6 +102,31 @@ def app_download() :
     red.setex(host_hash, 300, json.dumps(configuration))
     return render_template('app_download.html')
 
+
+@app.route('/install', methods=['GET'])
+def link():
+    configuration = {
+        "login": request.args.get('login'),
+        "password": request.args.get('password'),
+        "wallet-provider": request.args.get('wallet-provider')
+    }
+    host = request.headers['X-Real-Ip'] #+ ' ' +  request.headers['User-Agent']
+    host_hash = hash(host)
+    logging.info('configuration : %s stored for wallet : %s',configuration, host)
+    red.setex(host_hash, 300, json.dumps(configuration))
+    try:
+        if request.MOBILE:
+            ua = request.headers.get('User-Agent')
+            device = SoftwareDetector(ua).parse()
+            logging.info(device.os_name())
+            if device.os_name() == "Android":
+                return redirect('https://play.google.com/store/apps/details?id=co.altme.alt.me.altme')
+            else:
+                return redirect('https://apps.apple.com/fr/app/altme/id1633216869')
+        return jsonify('Install link error, no mobile')
+    except Exception:
+        return jsonify('Install link error')
+    
 
 @app.route('/configuration' , methods=['GET']) 
 def app_download_configuration():                           
