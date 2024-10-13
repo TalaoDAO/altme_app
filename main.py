@@ -114,7 +114,7 @@ def link():
     red.setex(host_hash, 300, json.dumps(configuration))
     ua = request.headers.get('User-Agent')
     device = SoftwareDetector(ua).parse()
-    logging.info(device.os_name())
+    logging.info("device name = %s", device.os_name())
     if device.os_name() == "Android" :
         return redirect('https://play.google.com/store/apps/details?id=co.altme.alt.me.altme')
     else:
@@ -130,7 +130,7 @@ def app_download_configuration():
         configuration = json.loads(red.get(host_hash).decode())
         red.delete(host_hash)
         logging.info("Configuration sent to this wallet")
-    except:
+    except Exception:
         logging.warning("No configuration available for this wallet")
         configuration = None
     return jsonify(configuration)
