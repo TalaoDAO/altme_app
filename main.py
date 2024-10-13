@@ -117,9 +117,11 @@ def link():
     logging.info("device name = %s", device.os_name())
     if device.os_name() == "Android" :
         return redirect('https://play.google.com/store/apps/details?id=co.altme.alt.me.altme')
-    else:
+    elif device.os_name() in ['iOS','iPadOS' ]:
         return redirect('https://apps.apple.com/fr/app/altme/id1633216869')
-    
+    else:
+        message = "This installation link must be used through your smartphone"
+        return render_template('install_link_error.html', message=message)
 
 @app.route('/configuration' , methods=['GET']) 
 def app_download_configuration():                           
