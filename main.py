@@ -117,11 +117,12 @@ def link():
     logging.info("device name = %s", device.os_name())
     if device.os_name() == "Android" :
         return redirect('https://play.google.com/store/apps/details?id=co.altme.alt.me.altme')
-    elif device.os_name() in ['iOS','iPadOS' ]:
+    elif device.os_name() in ['iOS', 'iPadOS']:
         return redirect('https://apps.apple.com/fr/app/altme/id1633216869')
     else:
         message = "This installation link must be used through your smartphone"
         return render_template('install_link_error.html', message=message)
+
 
 @app.route('/configuration' , methods=['GET']) 
 def app_download_configuration():                           
@@ -229,6 +230,19 @@ def did_doc():
             "did:web:app.altme.io:issuer#key-2"
         ]
     }
+
+
+
+# .well-known for walllet as issuer 
+@app.route('/wallet-issuer/.well-known/openid-configuration', methods=['GET'])
+def wallet_issuer_well_known_did():
+    wallet_issuer = json.load(open('wallet_metadata_for_verifiers.json', 'r'))
+    wallet_issuer["authorization_endpoint"] = "https://app.altme.io/app/download/authorize"
+    headers = {
+        "Content-Type": "application/did+ld+json",
+        "Cache-Control": "no-cache"
+    }
+    return Response(json.dumps(wallet_issuer), headers=headers)
 
 
 # MAIN entry point. Flask test server
