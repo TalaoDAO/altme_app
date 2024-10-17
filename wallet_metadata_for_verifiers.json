@@ -1,5 +1,5 @@
 {
-        "wallet_name": "Talao_wallet",
+        "wallet_name": "altme_wallet",
         "key_type": "software",
         "user_authentication": "system_biometry",
         "authorization_endpoint": "https://app.altme.io/app/download/authorize",
