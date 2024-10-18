@@ -91,7 +91,7 @@ def apple_app_site_association():
 @app.route('/app/download/authorize' , methods=['GET']) 
 @app.route('/app/download/callback' , methods=['GET']) 
 def app_callback():
-    return render_template('app_download/app_download_callback.html')
+    return render_template('app_download_callback.html')
 
 
 @app.route('/app/download' , methods=['GET']) 
