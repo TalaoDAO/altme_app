@@ -88,8 +88,9 @@ def apple_app_site_association():
 
 
 # callback link for browser problems
-@app.route('/app/download/authorize' , methods=['GET']) 
-@app.route('/app/download/callback' , methods=['GET']) 
+@app.route('/app/download/oidc4vc', methods=['GET'])
+@app.route('/app/download/authorize', methods=['GET'])
+@app.route('/app/download/callback', methods=['GET'])
 def app_callback():
     return render_template('app_download_callback.html')
 
