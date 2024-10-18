@@ -87,6 +87,13 @@ def apple_app_site_association():
     return jsonify(document)
 
 
+# callback link for browser problems
+@app.route('/app/download/authorize' , methods=['GET']) 
+@app.route('/app/download/callback' , methods=['GET']) 
+def app_callback():
+    return render_template('app_download/app_download_callback.html')
+
+
 @app.route('/app/download' , methods=['GET']) 
 def app_download() :
     configuration = {
