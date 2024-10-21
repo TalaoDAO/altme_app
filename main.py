@@ -65,7 +65,7 @@ def device_detector ():
 
 # OpenID 
 @app.route('/app/issuer/.well-known/openid-configuration', methods=['GET'])
-def openid() :
+def openid():
     oidc = {
         'credential_issuer': 'https://app.altme.io/app/issuer',
         'authorization_endpoint':  'https://app.altme.io/app/authorize' 
