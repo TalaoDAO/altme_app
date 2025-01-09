@@ -236,6 +236,17 @@ def did_doc():
         ],
         "capabilityInvocation":[
             "did:web:app.altme.io:issuer#key-2"
+        ],
+        "service": [
+            {
+                "id": "did:web:app.altme.io:issuer##service-1",
+                "type": "LinkedDomains",
+                "serviceEndpoint": [
+                    "https://talao.co",
+                    "https://altme.io"
+                    "https://issuer.talao.co"
+                ]
+            }
         ]
     }
 
@@ -246,7 +257,7 @@ def did_doc():
 def wallet_issuer_well_known_did():
     wallet_issuer = json.load(open('wallet_metadata_for_verifiers.json', 'r'))
     headers = {
-        "Content-Type": "application/did+ld+json",
+        "Content-Type": "application/json",
         "Cache-Control": "no-cache"
     }
     return Response(json.dumps(wallet_issuer), headers=headers)
